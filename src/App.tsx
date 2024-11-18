@@ -58,6 +58,25 @@ function App() {
   const [user, setUser] = useState<Users[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  useEffect(() => {
+    const getRandomUser = async () => {
+      try {
+        const response = await fetch(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const data = await response.json();
+        setUser(data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(true);
+        alert("Hata var:" + error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getRandomUser();
+  }, []);
+
   if (loading) return <p>Kullanıcı yükleniyor.....</p>;
 
   return (
