@@ -30,9 +30,35 @@ function LifeCycleTestComponent() {
   );
 }
 
+interface Users {
+  id?: {
+    userId: string;
+  };
+  name: string;
+  gender: string;
+  email: string;
+}
+
+function RenderUserCard({ name, gender, email }: Users) {
+  return (
+    <div>
+      <br />
+      <h1>{name}</h1>
+      <h1>{gender}</h1>
+      <h1>{email}</h1>
+    </div>
+  );
+}
+
 function App() {
   const [showLifeCycleTestComp, setShowLifeCycleTestComp] =
     useState<boolean>(true);
+
+  const [userRenderToggle, setUserRenderToggle] = useState<boolean>(false);
+  const [user, setUser] = useState<Users[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  if (loading) return <p>Kullanıcı yükleniyor.....</p>;
 
   return (
     <>
@@ -41,8 +67,24 @@ function App() {
         <button
           onClick={() => setShowLifeCycleTestComp((prevTest) => !prevTest)}
         >
-          Toggle Life cycle test component
+          Toggle Life cycle test
         </button>
+      </div>
+      <button onClick={() => setUserRenderToggle((prev) => !prev)}>
+        Kullanıcıyı getir
+      </button>
+      <div style={{ marginTop: "100px" }}>
+        {user.map(
+          (data, index) =>
+            userRenderToggle && (
+              <RenderUserCard
+                key={index}
+                name={data.name}
+                gender={data.gender}
+                email={data.email}
+              />
+            )
+        )}
       </div>
     </>
   );
