@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Card } from "./Card";
 
 function LifeCycleTestComponent() {
   const [counter, setCounter] = useState(0);
@@ -104,6 +105,17 @@ function App() {
               />
             )
         )}
+      </div>
+
+      <div style={{ margin: "200px" }}>
+        <Card title="Emre SEFEROĞLU">
+          <p>Merhaba emre</p>
+          <p>Merhaba emre</p>
+          <p>Merhaba emre</p>
+          <p>Merhaba emre</p>
+          <p>Merhaba emre</p>
+          <p>Merhaba emre</p>
+        </Card>
       </div>
     </>
   );
