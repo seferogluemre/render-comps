@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card } from "./Card";
 import { Container } from "react-bootstrap";
 import { TodoList, TodoListItems } from "./component/TodoList";
 import "./App.css";
 import { TodoListItem } from "./component/TodoListItem";
+import { TestComponent } from "./component/TestComponent";
 
 function LifeCycleTestComponent() {
   const [counter, setCounter] = useState(0);
@@ -55,7 +56,7 @@ function RenderUserCard({ name, gender, email }: Users) {
   );
 }
 
-const todos: TodoListItem[] = [
+const todos: TodoListItems[] = [
   {
     subject: "Video Çekmek",
     description: "React Videoları Çekilip tamamlancak",
@@ -79,9 +80,15 @@ const todos: TodoListItem[] = [
 ];
 
 function App() {
+  // const [state, setState, ref] = useStateRef(0);
+
   const [showLifeCycleTestComp, setShowLifeCycleTestComp] =
     useState<boolean>(true);
 
+  const inputRef = useRef("");
+
+  const [name, setName] = useState("");
+  const renderCount = useRef(null);
   const [userRenderToggle, setUserRenderToggle] = useState<boolean>(false);
   const [user, setUser] = useState<Users[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -105,6 +112,11 @@ function App() {
     getRandomUser();
   }, []);
 
+  useEffect(() => {
+    renderCount.current = renderCount.current + 1;
+    console.log(renderCount.current);
+  });
+
   if (loading) return <p>Kullanıcı yükleniyor.....</p>;
 
   const renderListItem = (todo: TodoListItems) => (
@@ -114,6 +126,15 @@ function App() {
       description={todo.description}
     />
   );
+
+  // const increaseRenderCount = () => {
+  //   renderCount.current = renderCount.current + 1;
+  // };
+  // const [counter, setCounter] = useStateRef(0);
+  // function increment() {
+  //   setCounter((count) => count + 1);
+  //   alert(counter);
+  // }
 
   return (
     <>
@@ -159,6 +180,25 @@ function App() {
           todos={todos}
           renderListItem={renderListItem}
         />
+      </Container>
+      <Container>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <div>Mevcut isim: {name}</div>
+        <div>Kaç kez render edildi: {renderCount.current}</div>
+        {/* <button onClick={increaseRenderCount}>Render count arttır!</button> */}
+      </Container>
+
+      <Container className="mt-5">
+        {/* <div>Güncel Sayı: {counter}</div>
+        <div>
+          <button onClick={increment}>Arttır</button>
+        </div> */}
+
+        <TestComponent ref={inputRef} />
       </Container>
     </>
   );
