@@ -5,6 +5,8 @@ import { TodoList, TodoListItems } from "./component/TodoList";
 import "./App.css";
 import { TodoListItem } from "./component/TodoListItem";
 import { TestComponent } from "./component/TestComponent";
+import { ClickCounter } from "./component/ClickCounter";
+import { MouseOverCounter } from "./component/MouseOverCounter";
 
 function LifeCycleTestComponent() {
   const [counter, setCounter] = useState(0);
@@ -78,61 +80,6 @@ const todos: TodoListItems[] = [
     isCompleted: false,
   },
 ];
-
-interface WithCounterComponentProps {
-  count: number;
-  increaseCount: () => void;
-}
-// WithCountera bu fonksiyon parametre geçildiginde bu component 2 prop alıyor oda withCounterdeki 2 işlemi alıp burda return kısmında tanımlayıp sayfada gösteriyor
-function ClickCounterOriginal({
-  count,
-  increaseCount,
-}: WithCounterComponentProps) {
-  return (
-    <div>
-      <span>Tıklama Sayacı: {count}</span>
-      <div>
-        <button onClick={increaseCount}>Sayacı Arttır</button>
-      </div>
-    </div>
-  );
-}
-function MouseOverCounterOriginal({
-  count,
-  increaseCount,
-}: WithCounterComponentProps) {
-  return (
-    <div>
-      <span>Mouse'mi Üstüne getirme Sayacı: {count}</span>
-      <div>
-        <button onMouseOver={increaseCount}>
-          Sayacı Butonun üzerine getirerek arttır
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function withCounter(OriginalComponent: any) {
-  // Bu withCounter dışardan component alıyor ve altta new componentde işlemleri yani arttırma işlemlerini 1 kere yazıp bizim dışardan gönderdigimiz componente prop geçiyor
-  function NewComponent() {
-    // İşlemi 1 kere yazıp parametre geçilen componente prop geçtik
-    const [count, setCount] = useState(0);
-
-    function handleIncrementCount() {
-      setCount((oldCount) => oldCount + 1);
-    }
-    return (
-      <OriginalComponent count={count} increaseCount={handleIncrementCount} />
-    );
-  }
-
-  return NewComponent;
-}
-
-const ClickCounter = withCounter(ClickCounterOriginal);
-const MouseOverCounter = withCounter(MouseOverCounterOriginal);
 
 function App() {
   // const [state, setState, ref] = useStateRef(0);
@@ -250,9 +197,9 @@ function App() {
         <TestComponent ref={inputRef} />
       </Container>
       <Container>
-        <ClickCounter />
+        <ClickCounter title="Emre SEFEROĞLU" />
         <br />
-        <MouseOverCounter />
+        <MouseOverCounter imgSrc="" />
       </Container>
     </>
   );
