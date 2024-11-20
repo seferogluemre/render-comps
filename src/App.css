@@ -34,3 +34,19 @@ body {
   color: #5f97b1;
   font-size: 21px;
 }
+
+.list-unstyled {
+  list-style-type: none !important;
+}
+.post-content {
+  width: 400px;
+  height: 300px;
+  border: none;
+  box-shadow: 0 4px 5px gray;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+.post-content:hover {
+  box-shadow: 0 6px 8px gray;
+}
