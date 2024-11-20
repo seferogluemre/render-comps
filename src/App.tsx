@@ -92,24 +92,24 @@ interface Post {
 }
 
 function App() {
-  const getAllPosts = async () => {
+  const getAllPosts = async (page: number = 0) => {
     try {
-      const response = await fetch(POSTS_URL);
+      const response = await fetch(POSTS_URL + "?page=" + page);
       const postsData: Post[] = await response.json();
       return postsData;
     } catch (e) {
-      setError(error);
-      console.error("Hata var:" + e);
+      console.log("Hata var:" + e);
+      setError("Tüh birşeyler ters gitti Daha sonra tekrar dene");
     }
   };
 
   // const [state, setState, ref] = useStateRef(0);
   const [error, setError] = useState<string | null>(null);
 
-  const [showLifeCycleTestComp, setShowLifeCycleTestComp] =
-    useState<boolean>(true);
+  // const [showLifeCycleTestComp, setShowLifeCycleTestComp] =
+  //   useState<boolean>(true);
 
-  const inputRef = useRef("");
+  // const inputRef = useRef("");
 
   // const [name, setName] = useState("");
   // const renderCount = useRef(null);
@@ -157,38 +157,28 @@ function App() {
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const handleNextPage = () => {
+    setPage((oldPage) => oldPage + 1);
+  };
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
 
     (async () => {
       setLoading(true);
-      const postsData = await getAllPosts();
+      const postsData = await getAllPosts(page);
       setPosts(postsData);
       setLoading(false);
     })();
-  }, []);
-
-  if (loading)
-    return (
-      <div
-        style={{
-          position: "fixed",
-          left: "45%",
-          top: "35%",
-          background: "whitesmoke",
-          textAlign: "center",
-        }}
-      >
-        <p>Gönderiler yükleniyor....</p>
-      </div>
-    );
+  }, [page]);
 
   if (error) {
     return (
       <div>
-        <p>Tüh Bi hata oluştu </p>
-        <button onClick={() => window.location.reload()}>Sayfayı yenile</button>
+        <p>{error}</p>
       </div>
     );
   }
@@ -196,15 +186,42 @@ function App() {
   return (
     <>
       <Container className="mt-5">
+        {page < 42 && (
+          <div className="text-center">
+            <button className="btn btn-primary" onClick={handleNextPage}>
+              Sıradaki Sayfa
+            </button>
+          </div>
+        )}
         <Row className="list-unstyled">
-          {posts.map((post) => (
-            <Col key={post.id} className="post-content " lg="4" md="4" sm="12">
-              <li>{post.title}</li>
-              <div>
-                <p>{post.body}</p>
-              </div>
-            </Col>
-          ))}
+          {loading ? (
+            <div
+              style={{
+                position: "fixed",
+                left: "45%",
+                top: "35%",
+                background: "whitesmoke",
+                textAlign: "center",
+              }}
+            >
+              <p>Gönderiler yükleniyor....</p>
+            </div>
+          ) : (
+            posts.map((post) => (
+              <Col
+                key={post.id}
+                className="post-content "
+                lg="4"
+                md="4"
+                sm="12"
+              >
+                <li>{post.title}</li>
+                <div>
+                  <p>{post.body}</p>
+                </div>
+              </Col>
+            ))
+          )}
         </Row>
       </Container>
     </>
